@@ -1,9 +1,47 @@
 {
-  
-  
   "version": 2,
-  
-  "projects": {},
+  "projects": {
+    "watchmaker-watchmaker": {
+      "root": "packages/watchmaker/watchmaker",
+      "sourceRoot": "packages/watchmaker/watchmaker/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "packages/watchmaker/watchmaker/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/packages/watchmaker/watchmaker"
+          ],
+          "options": {
+            "jestConfig": "packages/watchmaker/watchmaker/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/packages/watchmaker/watchmaker",
+            "tsConfig": "packages/watchmaker/watchmaker/tsconfig.lib.json",
+            "packageJson": "packages/watchmaker/watchmaker/package.json",
+            "main": "packages/watchmaker/watchmaker/src/index.ts",
+            "assets": [
+              "packages/watchmaker/watchmaker/*.md"
+            ]
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "defaultCollection": "@nrwl/workspace"
   }
