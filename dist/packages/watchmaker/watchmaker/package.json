@@ -1,0 +1,7 @@
+{
+  "name": "watchmaker-js",
+  "version": "0.0.5",
+  "main": "./watchmaker-js.umd.js",
+  "module": "./watchmaker-js.esm.js",
+  "typings": "./index.d.ts"
+}
