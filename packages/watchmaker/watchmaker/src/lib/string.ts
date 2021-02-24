@@ -37,6 +37,33 @@ export function getFixedStringLines(inputString: string, maxLen?: number, option
   return output;
 }
 
+/**
+ * Export a set of pages from a string
+ * @param str
+ * @param linesPerPage
+ * @param charactersPerLine
+ * @param otherOpts
+ */
+export function convertStringToPage(str: string, linesPerPage?: number, charactersPerLine?: number, otherOpts?: StringOptions) {
+  linesPerPage = linesPerPage || 4;
+  charactersPerLine = charactersPerLine || 18;
+
+  const pages = [];
+  const split = getFixedStringLines(str, charactersPerLine)
+
+  let allPagesDone = false
+  while (!allPagesDone) {
+    const page = split.splice(0, linesPerPage)
+    if (page.length === 0) {
+      allPagesDone = true;
+    } else {
+      pages.push(page.join('\n'));
+    }
+
+  }
+  return pages;
+}
+
 
 /**
  * Takes a Timestamp and formats to a YYYY-MM-DD date

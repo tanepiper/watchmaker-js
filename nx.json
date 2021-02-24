@@ -15,6 +15,6 @@
       "options": { "cacheableOperations": ["build", "lint", "test", "e2e"] }
     }
   },
-  "projects": { "watchmaker-watchmaker": { "tags": [] } },
+  "projects": { "watchmaker-js": { "tags": [] } },
   "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
 }

@@ -1,7 +1,7 @@
 {
   "version": 2,
   "projects": {
-    "watchmaker-watchmaker": {
+    "watchmaker-js": {
       "root": "packages/watchmaker/watchmaker",
       "sourceRoot": "packages/watchmaker/watchmaker/src",
       "projectType": "library",
@@ -25,17 +25,23 @@
           }
         },
         "build": {
-          "executor": "@nrwl/node:package",
+          "executor": "@nrwl/web:package",
           "outputs": [
             "{options.outputPath}"
           ],
           "options": {
             "outputPath": "dist/packages/watchmaker/watchmaker",
             "tsConfig": "packages/watchmaker/watchmaker/tsconfig.lib.json",
-            "packageJson": "packages/watchmaker/watchmaker/package.json",
-            "main": "packages/watchmaker/watchmaker/src/index.ts",
+            "project": "packages/watchmaker/watchmaker/package.json",
+            "entryFile": "packages/watchmaker/watchmaker/src/index.ts",
+            "babelConfig": "@nrwl/web/babel",
+            "rollupConfig": "packages/watchmaker/watchmaker/rollup.config.js",
             "assets": [
-              "packages/watchmaker/watchmaker/*.md"
+              {
+                "glob": "README.md",
+                "input": "libs/rxjs/example-lib/.",
+                "output": "."
+              }
             ]
           }
         }
