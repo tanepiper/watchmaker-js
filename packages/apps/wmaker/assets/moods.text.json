@@ -1,0 +1,15 @@
+{
+  "emotions": {
+    "Anger": ["Annoyance", "Rage"],
+    "Anticipation": ["Interest", "Vigilance"],
+    "Disgust": ["Boredom", "Loathing"],
+    "Fear": ["Apprehension", "Terror"],
+    "Joy": ["Serenity", "Ecstasy"],
+    "Sadness": ["Pensiveness", "Grief"],
+    "Surprise": ["Distraction", "Amazement"],
+    "Trust": ["Acceptance", "Admiration"]
+  },
+  "text": {
+    "help": "Moods is a BangleJS application for collecting data about your mood and emotions. When you record a mood you first select a general feeling - Happy, Neutral or Unhappy. Then select a more detailed emotion and the intensity how how you are feeling it from 1-5. The application will optionally collect your heart rate at this point. This can be disabled in the settings"
+  }
+}

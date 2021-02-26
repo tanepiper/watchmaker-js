@@ -1,0 +1,5 @@
+require('heatshrink').decompress(
+  atob(
+    'kEgwgdahnMA44AB4AGBAoQGDAAO8BIgVDAAIeGABInFB5QeNG44PJBxoAKlgON4czB59MA4iNEAAUzmc8B5HLlYCBmdDmgPEN4fD+YuC4RAEP4m//9M2YdBmZhDaII4Bmf/n87l49BkYJCma/BgYFC2fzn4cBGQIPEaAfLn5BBVwrwGn/ydw4gF2Z8FDwYgFDxQgEDxQgJBwwgHDw4gHBxAgFDxIgFBxQgDDxYgDBxgAZA=='
+  )
+);

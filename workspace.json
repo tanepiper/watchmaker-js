@@ -59,7 +59,7 @@
       }
     },
     "apps-wmaker": {
-      "projectType": "application",
+      "projectType": "library",
       "root": "packages/apps/wmaker",
       "sourceRoot": "packages/apps/wmaker/src",
       "targets": {
@@ -73,7 +73,13 @@
             "babelConfig": "@nrwl/web/babel",
             "rollupConfig": "packages/apps/wmaker/rollup.config.js",
             "tsConfig": "packages/apps/wmaker/tsconfig.app.json",
-            "assets": []
+            "assets": [
+              {
+                "glob": "*",
+                "input": "packages/apps/wmaker/assets",
+                "output": "."
+              }
+            ]
           }
         },
         "serve": {
