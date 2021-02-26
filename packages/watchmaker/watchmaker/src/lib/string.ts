@@ -7,12 +7,17 @@ import { StringOptions } from '../types';
  * @param maxLen The maximum length of a line
  * @param options
  */
-export function getFixedStringLines(inputString: string, maxLen?: number, options?: StringOptions) {
+export function getFixedStringLines(
+  inputString: string,
+  maxLen?: number,
+  options?: StringOptions
+) {
   maxLen = maxLen || 20;
   options = options || {
     splitChar: ' ',
-    joinChar: ' '
+    joinChar: ' ',
   };
+  console.log(inputString);
 
   const allWords = (inputString || '').split(options.splitChar);
   const output = [];
@@ -44,26 +49,29 @@ export function getFixedStringLines(inputString: string, maxLen?: number, option
  * @param charactersPerLine
  * @param otherOpts
  */
-export function convertStringToPage(str: string, linesPerPage?: number, charactersPerLine?: number, otherOpts?: StringOptions) {
+export function convertStringToPage(
+  str: string,
+  linesPerPage?: number,
+  charactersPerLine?: number,
+  otherOpts?: StringOptions
+) {
   linesPerPage = linesPerPage || 4;
   charactersPerLine = charactersPerLine || 18;
 
   const pages = [];
-  const split = getFixedStringLines(str, charactersPerLine)
+  const split = getFixedStringLines(str, charactersPerLine);
 
-  let allPagesDone = false
+  let allPagesDone = false;
   while (!allPagesDone) {
-    const page = split.splice(0, linesPerPage)
+    const page = split.splice(0, linesPerPage);
     if (page.length === 0) {
       allPagesDone = true;
     } else {
       pages.push(page.join('\n'));
     }
-
   }
   return pages;
 }
-
 
 /**
  * Takes a Timestamp and formats to a YYYY-MM-DD date
@@ -72,7 +80,13 @@ export function convertStringToPage(str: string, linesPerPage?: number, characte
  */
 export function formatTimestampToDate(timestamp) {
   const lineDate = new Date(timestamp);
-  return [`${lineDate.getFullYear()}`, `${lineDate.getMonth()}`, `${lineDate.getDate()}`].map(d => d.length < 2 ? `0${d}` : `${d}`).join(`-`);
+  return [
+    `${lineDate.getFullYear()}`,
+    `${lineDate.getMonth()}`,
+    `${lineDate.getDate()}`,
+  ]
+    .map((d) => (d.length < 2 ? `0${d}` : `${d}`))
+    .join(`-`);
 }
 
 /**
@@ -83,6 +97,12 @@ export function formatTimestampToDate(timestamp) {
  */
 export function formatTimestampToTime(timestamp, withSeconds) {
   const lineDate = new Date(timestamp);
-  const time = [`${lineDate.getHours()}`, `${lineDate.getMinutes()}`, `${lineDate.getSeconds()}`].map(d => d.length < 2 ? `0${d}` : `${d}`).join(`:`);
+  const time = [
+    `${lineDate.getHours()}`,
+    `${lineDate.getMinutes()}`,
+    `${lineDate.getSeconds()}`,
+  ]
+    .map((d) => (d.length < 2 ? `0${d}` : `${d}`))
+    .join(`:`);
   return withSeconds ? time : time.substr(0, 5);
 }
