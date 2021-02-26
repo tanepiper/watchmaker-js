@@ -17,8 +17,7 @@ export declare function createSelectPage(title: any, question: any, buttons: any
  */
 export declare function createMenu(title: string, subtitle: string, menuItems: Record<string, any>, backFn: () => void, exitFn: () => void): {
     draw: () => void;
-    move: () => void;
-    select: () => void; /**
+    /**
      * Create a selection page
      * @param title
      * @param question
@@ -26,14 +25,16 @@ export declare function createMenu(title: string, subtitle: string, menuItems: R
      * @param selected
      * @param dontFormatText
      */
+    move: () => void;
+    select: () => void;
 };
 /**
  * Create an alert and call then passed callback
+ * @param title
  * @param text
- * @param cb
  * @param dontFormat
  */
-export declare function createAlert(text: string, cb: () => void, dontFormat?: boolean): void;
+export declare function createAlert(title: string, text: string, dontFormat?: boolean): Promise<void>;
 /**
  * Show a message for a specified time before resolving, if no time then immediately return
  * @param title

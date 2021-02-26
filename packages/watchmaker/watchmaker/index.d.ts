@@ -1,5 +1,5 @@
 interface E {
-  showAlert: (text: string) => Promise<void>;
+  showAlert: (text: string, title?: string) => Promise<void>;
   showPrompt: (
     body?: string,
     options?: {
@@ -24,6 +24,14 @@ interface g {
 
 interface Bangle {
   [key: string]: any;
+}
+
+interface StorageFile {
+  erase: () => void;
+  getLength: () => number;
+  read: (len: number) => string | undefined;
+  readLine: () => string | undefined;
+  write: (data: string) => void;
 }
 
 declare var E: E;

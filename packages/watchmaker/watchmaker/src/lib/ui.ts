@@ -73,19 +73,15 @@ export function createMenu(
 
 /**
  * Create an alert and call then passed callback
+ * @param title
  * @param text
- * @param cb
  * @param dontFormat
  */
-export function createAlert(
-  text: string,
-  cb: () => void,
-  dontFormat?: boolean
-) {
+export function createAlert(title: string, text: string, dontFormat?: boolean) {
   if (!dontFormat) {
     text = convertStringToPage(text)[0];
   }
-  E.showAlert(text).then(cb);
+  return E.showAlert(text, title);
 }
 
 /**

@@ -1,7 +1,15 @@
 {
+  "extends": [
+    "plugin:es/no-new-in-esnext",
+    "plugin:es/no-new-in-es2020",
+    "plugin:es/no-new-in-es2019",
+    "plugin:es/no-new-in-es2018",
+    "plugin:es/no-new-in-es2017",
+    "plugin:es/no-new-in-es2015"
+  ],
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "plugins": ["@nrwl/nx", "es"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -18,7 +26,28 @@
               }
             ]
           }
-        ]
+        ],
+        "es/no-exponential-operators": 2,
+        "es/no-typed-arrays": 0,
+        "es/no-template-literals": 0,
+        "es/no-object-assign": 0,
+        "es/no-number-issafeinteger": 0,
+        "es/no-promise": 0,
+        "es/no-classes": 0,
+        "es/no-arrow-functions": 0,
+        "es/no-array-prototype-findindex": 0,
+        "es/no-string-prototype-repeat": 0,
+        "es/no-string-prototype-endswith": 0,
+        "es/no-string-prototype-includes": 0,
+        "es/no-string-prototype-startswith": 0,
+        "es/no-object-isextensible": 2,
+        "es/no-object-isfrozen": 2,
+        "es/no-object-issealed": 2,
+        "es/no-object-preventextensions": 2,
+        "es/no-object-seal": 2,
+        "es/no-modules": 0,
+        "es/no-block-scoped-variables": 0,
+        "@typescript-eslint/no-var-requires": 0
       }
     },
     {
