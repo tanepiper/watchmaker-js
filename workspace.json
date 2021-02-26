@@ -1,5 +1,22 @@
 {
   "version": 2,
+  "cli": {
+    "defaultCollection": "@nrwl/web"
+  },
+  "defaultProject": "apps-wmaker",
+  "generators": {
+    "@nrwl/web:application": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/web:library": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    }
+  },
   "projects": {
     "watchmaker-js": {
       "root": "packages/watchmaker/watchmaker",
@@ -9,16 +26,12 @@
         "lint": {
           "executor": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": [
-              "packages/watchmaker/watchmaker/**/*.ts"
-            ]
+            "lintFilePatterns": ["packages/watchmaker/watchmaker/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/packages/watchmaker/watchmaker"
-          ],
+          "outputs": ["coverage/packages/watchmaker/watchmaker"],
           "options": {
             "jestConfig": "packages/watchmaker/watchmaker/jest.config.js",
             "passWithNoTests": true
@@ -26,9 +39,7 @@
         },
         "build": {
           "executor": "@nrwl/web:package",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/watchmaker/watchmaker",
             "tsConfig": "packages/watchmaker/watchmaker/tsconfig.lib.json",
@@ -46,9 +57,51 @@
           }
         }
       }
+    },
+    "apps-wmaker": {
+      "projectType": "application",
+      "root": "packages/apps/wmaker",
+      "sourceRoot": "packages/apps/wmaker/src",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/packages/apps/wmaker",
+            "entryFile": "packages/apps/wmaker/src/main.ts",
+            "project": "packages/apps/wmaker/package.json",
+            "babelConfig": "@nrwl/web/babel",
+            "rollupConfig": "packages/apps/wmaker/rollup.config.js",
+            "tsConfig": "packages/apps/wmaker/tsconfig.app.json",
+            "assets": []
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "apps-wmaker:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "apps-wmaker:build:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["packages/apps/wmaker/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/packages/apps/wmaker"],
+          "options": {
+            "jestConfig": "packages/apps/wmaker/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
     }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/workspace"
   }
 }

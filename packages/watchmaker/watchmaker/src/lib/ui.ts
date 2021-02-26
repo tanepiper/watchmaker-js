@@ -20,11 +20,11 @@ import { convertStringToPage, getFixedStringLines } from './string';
  * @param dontFormatText
  */
 export function createSelectPage(
-  title,
-  question,
-  buttons,
-  selected,
-  dontFormatText
+  title: string,
+  question: string,
+  buttons: Record<string, any>,
+  selected?: number,
+  dontFormatText?: boolean
 ) {
   selected = selected || 0;
   if (!dontFormatText) {
@@ -49,8 +49,8 @@ export function createMenu(
   title: string,
   subtitle: string,
   menuItems: Record<string, any>,
-  backFn: () => void,
-  exitFn: () => void
+  backFn?: () => void,
+  exitFn?: () => void
 ) {
   E.showMenu();
   const menu = {

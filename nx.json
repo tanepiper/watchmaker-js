@@ -1,20 +1,37 @@
 {
-  "npmScope": "tinynodes",
-  "affected": { "defaultBase": "main" },
   "implicitDependencies": {
     "workspace.json": "*",
-    "package.json": { "dependencies": "*", "devDependencies": "*" },
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
+  "affected": {
+    "defaultBase": "main"
+  },
+  "npmScope": "tinynodes",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/workspace/tasks-runners/default",
-      "options": { "cacheableOperations": ["build", "lint", "test", "e2e"] }
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
     }
   },
-  "projects": { "watchmaker-js": { "tags": [] } },
-  "workspaceLayout": { "appsDir": "packages", "libsDir": "packages" }
+  "workspaceLayout": {
+    "appsDir": "packages",
+    "libsDir": "packages"
+  },
+  "projects": {
+    "watchmaker-js": {
+      "tags": []
+    },
+    "apps-wmaker": {
+      "tags": []
+    }
+  }
 }

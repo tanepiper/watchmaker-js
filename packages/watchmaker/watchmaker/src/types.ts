@@ -47,8 +47,8 @@ export interface Lug {
   setState: (key: string, state: any) => void;
   getState: (key: string) => unknown;
   getText: () => Record<string, unknown> | undefined;
-  getGlobalSettings: () => Record<string, unknown> | undefined;
-  getSettings: () => Record<string, unknown> | undefined;
+  getGlobalSettings: (name?: string) => Record<string, unknown> | unknown | undefined;
+  getSettings: (name?: string) => Record<string, unknown> | unknown | undefined;
   saveSettings: (settings: Record<string, unknown>) => boolean;
   saveData: (name: string, data: Record<string, unknown>) => Promise<void>;
   getData: (name: string, lines?: number) => Promise<Record<string, unknown>[]>;
