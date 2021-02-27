@@ -1,0 +1,9 @@
+{
+  "builders": {
+    "build": {
+      "implementation": "./package.impl",
+      "schema": "./schema.json",
+      "description": "Builds for BangleJS"
+    }
+  }
+}

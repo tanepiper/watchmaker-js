@@ -38,7 +38,7 @@
           }
         },
         "build": {
-          "executor": "@nrwl/web:package",
+          "executor": "./tools/executors/watchmaker-build:build",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/watchmaker/watchmaker",
@@ -64,7 +64,7 @@
       "sourceRoot": "packages/apps/wmaker/src",
       "targets": {
         "build": {
-          "executor": "@nrwl/web:package",
+          "executor": "./tools/executors/watchmaker-build:build",
           "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/packages/apps/wmaker",

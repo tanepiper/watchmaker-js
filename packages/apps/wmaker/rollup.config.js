@@ -7,20 +7,24 @@ const internal = require('rollup-plugin-internal');
 module.exports = (config) => {
   return {
     ...config,
-    // output: {
-    //   ...config.output,
-    //   format: 'cjs',
-    //   name: 'watchmaker'
-    // },
-    plugins: [
-      ...config.plugins,
-      nodeResolve(),
-      commonjs({
-        extensions: ['.js'],
-        transformMixedEsModules: true,
-      }),
-      autoExternal(),
-      internal.default(['watchmaker-js']),
-    ],
+    plugins: [...config.plugins, terser()],
   };
+  // return {
+  //   ...config,
+  //   // output: {
+  //   //   ...config.output,
+  //   //   format: 'cjs',
+  //   //   name: 'watchmaker'
+  //   // },
+  //   plugins: [
+  //     ...config.plugins,
+  //     nodeResolve(),
+  //     commonjs({
+  //       extensions: ['.js'],
+  //       transformMixedEsModules: true,
+  //     }),
+  //     autoExternal(),
+  //     internal.default(['watchmaker-js']),
+  //   ],
+  // };
 };

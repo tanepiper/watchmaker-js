@@ -3,7 +3,8 @@
  */
 const storage = require('Storage');
 const locale = require('locale');
-const watchMaker = require('watchmaker-js');
+
+import * as watchMaker from 'watchmaker-js';
 
 const version = '0.1';
 
@@ -21,13 +22,7 @@ function debugInfo(tickTime?: number) {
   const interval = setInterval(() => {
     const memory = process.memory();
     const pc = Math.round((memory.usage * 100) / memory.total);
-    const debugInfo = [
-      Bangle.dbg(),
-      memory,
-      pc,
-      storage.getFree(),
-      process.version,
-    ];
+    const debugInfo = [Bangle.dbg(), memory, pc, storage.getFree(), process.version];
     moodsApp.setState('debugInfo', debugInfo);
   }, tickTime || 5000);
 
@@ -80,12 +75,8 @@ function setupLCDListener(app) {
  */
 function setupGPSListener(app, cb) {
   Bangle.on('GPS', (gps) => {
-    if (cb) {
-      cb(gps);
-    }
-    if (gps.fix) {
-      app.setState('currentLocation', gps);
-    }
+    cb && cb(gps);
+    gps.fix && app.setState('currentLocation', gps);
   });
 }
 
@@ -99,17 +90,12 @@ function setupHMRListener(app, cb) {
   Bangle.on('HRM', (hrm) => {
     const confidenceLevel = app.getSettings('confidenceLevel');
     const hrmQueue = app.getState('hrmQueue');
+    const isValid = hrm.confidence >= confidenceLevel;
     if (hrm.confidence >= confidenceLevel) {
       hrmQueue.push(hrm.bpm);
       app.setState('hrmQueue', hrmQueue);
-      if (cb) {
-        cb(hrmQueue, true);
-      }
-    } else {
-      if (cb) {
-        cb(hrmQueue, false);
-      }
     }
+    cb(hrmQueue, isValid);
   });
 }
 
@@ -119,8 +105,7 @@ function setupHMRListener(app, cb) {
  * @param steps
  */
 function showIntro(step: number, steps?: string[]) {
-  steps =
-    steps || watchMaker.convertStringToPage(moodsApp.getText('text.help'));
+  steps = steps || watchMaker.convertStringToPage(moodsApp.getText('text.help'));
 
   if (step < 0 || !steps[step]) {
     moodsApp.goTo('home');
@@ -136,13 +121,7 @@ function showIntro(step: number, steps?: string[]) {
         0,
         true
       )
-      .then((nextStep) => {
-        if (!nextStep) {
-          showIntro(-1, steps);
-        } else {
-          showIntro(nextStep, steps);
-        }
-      });
+      .then((nextStep) => (!nextStep ? showIntro(-1, steps) : showIntro(nextStep, steps)));
   }
 }
 
@@ -154,12 +133,8 @@ function viewMainMenu() {
   toggleLocationCollection(false);
   toggleHMR(false);
 
-  let moodText = '';
   const lastMood = moodsApp.getState('lastMood');
-
-  if (lastMood) {
-    moodText = `${locale.time(new Date(lastMood.time), 1)} - ${lastMood.mood}`;
-  }
+  const moodText = lastMood ? `${locale.time(new Date(lastMood.time), 1)} - ${lastMood.mood}` : '';
   const menu = {};
   menu['Set Mood'] = () => moodsApp.goTo('addMood');
   menu['Recent History'] = () => moodsApp.goTo('showHistory');
@@ -168,7 +143,6 @@ function viewMainMenu() {
   if (moodsApp.getState('globalDebug')) {
     menu['Debug'] = () => moodsApp.goTo('debug');
   }
-
   watchMaker.createMenu('Moods', moodText, menu, undefined, () => {
     if (debugFn) debugFn();
     load();
@@ -186,18 +160,13 @@ function createHRMQueue(seconds) {
   const countdown = watchMaker.createCountdown(
     seconds / 1000,
     (left) => {
-      E.showMessage(
-        `Collecting\nKeep Still...\nCancel - BTN2\n${left} seconds left`,
-        'Heart Rate'
-      );
+      E.showMessage(`Collecting\nKeep Still...\nCancel - BTN2\n${left} seconds left`, 'Heart Rate');
       LED2.write(1);
     },
     5
   );
 
-  setWatch(() => {
-    countdown.cancel();
-  }, BTN2);
+  setWatch(() => countdown.cancel(), BTN2);
 
   toggleHMR(true);
   return countdown.start.then((cancelled) => {
@@ -218,7 +187,6 @@ function toggleHMR(on) {
  *
  * @param mood
  * @param level
- * @param settings
  */
 function requestHeartRate(mood, level) {
   watchMaker
@@ -236,10 +204,9 @@ function requestHeartRate(mood, level) {
         writeMood(mood, level, 0);
       } else {
         createHRMQueue(seconds).then((results) => {
-          const average = Math.floor(
-            results.reduce((a, b) => a + b, 0) / results.length
-          );
+          const average = Math.floor(results.reduce((a, b) => a + b, 0) / results.length);
           writeMood(mood, level, average);
+          moodsApp.setState('hrmQueue', null);
         });
       }
     });
@@ -259,10 +226,7 @@ function promptMoodList(forMood) {
     .createScrollPrompt(
       `${forMood} Mood`,
       'Select a more detailed emotion - use BTN1 and BTN3 to scroll',
-      emotions.reduce((a, k) => {
-        a[k] = k;
-        return a;
-      }, {})
+      emotions.reduce((a, k) => (a[k] = k) && a, {})
     )
     .then((k) => moodsApp.goTo('setMoodLevel', k));
 }
@@ -278,21 +242,14 @@ function promptMoodGroup() {
 
   const emotions = moodsApp.getText('emotions');
   E.showMessage('', 'Select An Emotion');
-  // drawSelect((g.getWidth() / 2) - 48, 140);
 
   setTimeout(() => {
-    const menuButtons = Object.keys(emotions).reduce((buttons, key) => {
-      buttons[key] = () => moodsApp.goTo('setMoodType', key);
-      return buttons;
-    }, {});
-
-    watchMaker.createMenu(
-      'Select Emotion',
-      undefined,
-      menuButtons,
-      undefined,
-      () => moodsApp.goTo('home')
+    const menuButtons = Object.keys(emotions).reduce(
+      (buttons, key) => (buttons[key] = () => moodsApp.goTo('setMoodType', key)) && buttons,
+      {}
     );
+
+    watchMaker.createMenu('Select Emotion', undefined, menuButtons, undefined, () => moodsApp.goTo('home'));
   }, 3000);
 }
 
@@ -319,26 +276,18 @@ function promptMoodLevel(mood) {
       },
       2
     )
-    .then((level) => {
-      const collectHRM = moodsApp.getSettings('collectHRM');
-      if (!collectHRM) {
-        writeMood(mood, level, 0);
-      } else {
-        moodsApp.goTo('requestHRM', mood, level);
-      }
-    });
+    .then((level) =>
+      moodsApp.getSettings('collectHRM') ? moodsApp.goTo('requestHRM', mood, level) : writeMood(mood, level, 0)
+    );
 }
 
 function showLastMoods(index, lastIndex, moods) {
   const maxHistory = moodsApp.getSettings('maxHistory');
   moodsApp.getData('data', maxHistory).then((moods) => {
     if (moods.length === 0) {
-      watchMaker
+      return watchMaker
         .createAlert('No Data', 'No data has been collected for Moods')
-        .then(() => {
-          moodsApp.goTo('home');
-        });
-      return;
+        .then(() => moodsApp.goTo('home'));
     }
     let btnCount = 1;
     const buttons = {};
@@ -366,10 +315,7 @@ function showLastMoods(index, lastIndex, moods) {
 
     watchMaker
       .createSelectPage(
-        `${locale.date(new Date(mood.time), 1)}: ${locale.time(
-          new Date(mood.time),
-          1
-        )}`,
+        `${locale.date(new Date(mood.time), 1)}: ${locale.time(new Date(mood.time), 1)}`,
         [
           `Mood: ${mood.mood}`,
           `Level: ${mood.level}`,
@@ -380,13 +326,7 @@ function showLastMoods(index, lastIndex, moods) {
         selected,
         true
       )
-      .then((i) => {
-        if (i === -1) {
-          moodsApp.goTo('home');
-        } else {
-          moodsApp.goTo('showHistory', i, index, moods);
-        }
-      });
+      .then((i) => (i === -1 ? moodsApp.goTo('home') : moodsApp.goTo('showHistory', i, index, moods)));
   });
 }
 
@@ -489,14 +429,9 @@ function writeMood(mood, level, rate) {
 function showDebug() {
   const debugInfo = moodsApp.getState('debugInfo');
   if (!debugInfo) {
-    watchMaker
-      .createAlert(
-        'No Debug Info',
-        'No Debug info available, try again in a few seconds'
-      )
-      .then(() => {
-        moodsApp.goTo('home');
-      });
+    watchMaker.createAlert('No Debug Info', 'No Debug info available, try again in a few seconds').then(() => {
+      moodsApp.goTo('home');
+    });
     return;
   }
   const header = `Debug Info (${version})`;
@@ -512,12 +447,10 @@ function showDebug() {
       'Space Free': { value: `${debugInfo[3]}` },
       'Espurino v.': { value: `${debugInfo[4]}` },
       Dump: () => {
-        watchMaker
-          .createMessage('Moods Debug', 'Dumping variables to console')
-          .then(() => {
-            E.dumpVariables();
-            moodsApp.goTo('debug');
-          });
+        watchMaker.createMessage('Moods Debug', 'Dumping variables to console').then(() => {
+          E.dumpVariables();
+          moodsApp.goTo('debug');
+        });
       },
       Refresh: () => moodsApp.goTo('debug'),
     },
@@ -536,8 +469,7 @@ moodsApp = watchMaker.lug('moods', {
     setMoodType: { view: (mood) => promptMoodList(mood) },
     setMoodLevel: { view: (mood) => promptMoodLevel(mood) },
     showHistory: {
-      view: (index, lastIndex, moods) =>
-        showLastMoods(index || 0, lastIndex, moods),
+      view: (index, lastIndex, moods) => showLastMoods(index || 0, lastIndex, moods),
     },
     requestHRM: { view: (mood, level) => requestHeartRate(mood, level) },
     settings: { view: () => showSettings() },
